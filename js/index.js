@@ -193,6 +193,28 @@ linkedList.prototype.partition = function (val) {
     rightLinkedList.printList();
     return leftLinkedList
 }
+function sumList(list1, list2) {
+    var pointerList1 = list1.head;
+    var pointerList2 = list2.head;
+    var list3 = new linkedList();
+    var sum = 0
+    var carry = 0
+    while(pointerList1 != null || pointerList2 != null) {
+        sum = carry + (pointerList1 != null ? pointerList1.value : 0) + (pointerList2 != null ? pointerList2.value : 0)
+        carry = Math.floor(sum/10) 
+        list3.push(sum % 10)
+        if(pointerList1 != null) {
+            pointerList1 = pointerList1.next
+        }
+        if(pointerList2 != null) {
+            pointerList2 = pointerList2.next
+        }
+    }
+    if(carry === 1) {
+        list3.push(carry)
+    }
+    return list3
+}
 var matrixTest = [
     [1, 2, 3, 9],
     [5, 0, 7, 8],
@@ -208,10 +230,10 @@ var matrixTest = [
 var lls = new linkedList();
 lls.push(5)
 lls.push(8)
-lls.push(10)
-lls.push(2)
 lls.push(3)
-lls.push(4)
-//traver list
-//lls.printList()
-lls.partition(5)
+var lls2 = new linkedList();
+lls2.push(2)
+lls2.push(3)
+lls2.push(4)
+var ResultList = sumList(lls, lls2)
+ResultList.printList()
