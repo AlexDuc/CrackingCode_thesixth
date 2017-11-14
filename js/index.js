@@ -278,6 +278,42 @@ function sumListForward(list1, list2) {
     }
     return list3
 }
+
+function getIntersection(list1, list2) {
+    var pointer1 = list1.head
+    var pointer2 = list1.head
+    var count1 = 1
+    var count2 = 1
+    while (pointer1) {
+        pointer1 = pointer1.next
+        count1 = count1 + 1
+    }
+    while (pointer2) {
+        pointer2 = pointer2.next
+        count2 = count2 + 1
+    }
+    if (pointer2.value !== pointer1.value) {
+        return -1
+    }
+    var d = count1 - count2
+    pointer1 = list1.head
+    pointer2 = list1.head
+    if (d < 0) {
+        d = -d
+        for (var i = 1; i < d; i++) {
+            pointer2 = pointer2.next
+        }
+    } else {
+        for (var i = 1; i < d; i++) {
+            pointer1 = pointer1.next
+        }
+    }
+    while (pointer1 != pointer2) {
+        pointer1 = pointer1.next
+        pointer2 = pointer2.next
+    }
+    return pointer1
+}
 var matrixTest = [
         [1, 2, 3, 9],
         [5, 0, 7, 8],
