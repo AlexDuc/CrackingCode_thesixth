@@ -256,7 +256,24 @@ linkedList.prototype.isPalindrome = function() {
     }
     return _isPalindrome
 }
-
+linkedList.prototype.loopDetection = function ()  {
+    var slowPointer = this.head
+    var fastPointer = this.head
+    while(fastPointer) {
+        fastPointer = fastPointer.next
+        if(slowPointer == fastPointer) {
+            return true
+        } else {
+            fastPointer = fastPointer.next
+            if(slowPointer == fastPointer) {
+                return true
+            } else {
+                slowPointer = slowPointer.next
+            }
+        }
+    }
+    return false
+}
 function sumListForward(list1, list2) {
     var current = list1.head
     var sum1 = 0;
@@ -314,6 +331,7 @@ function getIntersection(list1, list2) {
     }
     return pointer1
 }
+
 var matrixTest = [
         [1, 2, 3, 9],
         [5, 0, 7, 8],
