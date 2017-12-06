@@ -51,33 +51,34 @@ setOfStack.prototype.pop = function() {
 setOfStack.prototype.popAt = function(index) {
     this.stackSet[index].pop()
 }
-MyQueue = function() {
-    var inbox = new stack()
-    var outbox = new stack()
+var Queue = function() {
+    this.inbox = new stack()
+    this.outbox = new stack()
 }
-MyQueue.prototype.add = function(item) {
-    inbox.push(item)
+Queue.prototype.add = function(item) {
+    this.inbox.push(item)
 }
-MyQueue.prototype.remove = function() {
-    if (outbox.count === 0) {
-        for (var i = inbox.count - 1; i >= 0; i--) {
-            outbox.push(inbox.pop)
+Queue.prototype.remove = function() {
+    if (this.outbox.count === 0) {
+        for (var i = this.inbox.count - 1; i >= 0; i--) {
+            this.outbox.push(this.inbox.pop())
         }
     }
-    return outbox.pop()
+
+    return this.outbox.pop()
 }
-MyQueue.prototype.peek = function() {
-    if (inbox.count === 0) {
-        if (outbox.count === 0) {
+Queue.prototype.peek = function() {
+    if (this.inbox.count === 0) {
+        if (this.outbox.count === 0) {
             return undefined
         } else {
-            inbox.push(outbox.pop)
+            this.inbox.push(this.outbox.pop())
         }
     }
-    return inbox.pop()
+    return this.outbox.pop()
 }
-MyQueue.prototype.isEmpty = function() {
-    if (inbox.count === 0 && outbox.count === 0) {
+Queue.prototype.isEmpty = function() {
+    if (this.inbox.count === 0 && this.outbox.count === 0) {
         return true
     } else {
         return false

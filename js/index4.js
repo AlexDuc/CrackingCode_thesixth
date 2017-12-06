@@ -1,5 +1,168 @@
-var Queue = require('./util/Queue');
-var Graph = require('./util/Graph')
-function isReachables(s, t, graph) {
-    
+var stack = function() {
+    this.count = 0
+        // var min = []
+    this.storage = {}
 }
+stack.prototype.push = function(value) {
+    this.count += 1
+    this.storage[this.count] = value
+    if (this.count === 0) {
+        // this.min.push(value)
+    } else {
+        // if (value < this.min[this.min.length - 1]) {
+        //     // this.min.push(value)
+        // }
+    }
+}
+stack.prototype.pop = function() {
+    if (this.count === 0) {
+        return undefined
+    } else {
+        var item = this.storage[this.count]
+        delete this.storage[this.count]
+        this.count -= 1
+        // console.log(this.storage)
+        // console.log(this.count)
+            // this.min.pop()
+        return item
+    }
+}
+stack.prototype.printStack = function() {
+    console.log(JSON.stringify(this.storage))
+    console.log('number of elements', this.count)
+}
+var Queue = function() {
+    this.inbox = new stack()
+    this.outbox = new stack()
+}
+Queue.prototype.add = function(item) {
+    this.inbox.push(item)
+}
+Queue.prototype.remove = function() {
+    if (this.outbox.count === 0) {
+        for (var i = this.inbox.count - 1; i >= 0; i--) {
+            this.outbox.push(this.inbox.pop())
+        }
+    }
+    var item = this.outbox.pop()
+    return item
+}
+Queue.prototype.peek = function() {
+    if (this.inbox.count === 0) {
+        if (this.outbox.count === 0) {
+            return undefined
+        } else {
+            this.inbox.push(this.outbox.pop())
+        }
+    }
+    var item = this.outbox.pop()
+    return item
+}
+Queue.prototype.isEmpty = function() {
+    if (this.inbox.count === 0 && this.outbox.count === 0) {
+        return true
+    } else {
+        return false
+    }
+}
+
+var Graph = function() {
+    this.V = {}
+}
+Graph.prototype.addNode = function(value) {
+    if(this.V[value]) {
+        return `node of value ${value} already exists `
+    }
+    this.V[value] = {}
+}
+Graph.prototype.addEdge = function(s, t) {
+    if(!this.V[s] || !this.V[t]) {
+        return `node not exists `
+    }
+    if(this.V[s][t]) {
+        return `edge ${s} - ${t} already exists`
+    }
+    this.V[s][t] = true
+}
+Graph.prototype.findEdges = function(node) {
+    if (this.V[node] === undefined) {
+      return 'node does not exist';
+    } else {
+      return this.V[node];
+    }
+  };
+  Graph.prototype.hasNode = function(node) {
+    return this.V[node] !== undefined;
+  };
+
+function isReachables(s, t, graph) {
+    var queue1 = new Queue();
+    var queue2 = new Queue();
+    var visited1 = {}
+    var visited2 = {}
+    if(graph.hasNode(s)) {
+        for (var edge in graph.findEdges(s)) {
+            queue1.add(edge)
+        }
+    }
+    if(graph.hasNode(t)) {
+        for (var edge2 in graph.findEdges(t)) {
+            queue2.add(edge2)
+        }
+    }
+    var nextNode1 = queue1.remove()
+    var nextNode2;
+    while(!queue1.isEmpty() || !queue2.isEmpty()) {
+        if(!queue1.isEmpty()) {
+            nextNode1 = queue1.remove()
+            if(nextNode1 === t) {
+                return true
+            }
+            if (visited1[nextNode1] === undefined) {
+                visited1[nextNode1] = true;
+                if(graph.hasNode(nextNode1)) { 
+                    for(var edge in graph.findEdges(nextNode1)) {
+                        queue1.add(edge)
+                    }
+                }
+            }
+        }
+        if(!queue2.isEmpty()) {
+            nextNode2 = queue2.remove()
+            if(nextNode2 === s) {
+                return true
+            }
+            if (visited2[nextNode2] === undefined) {
+                visited2[nextNode2] = true;
+                if(graph.hasNode(nextNode2)) { 
+                    for(var edge2 in graph.findEdges(nextNode2)) {
+                        queue2.add(edge2)
+                    }
+                }
+            }
+        }
+    }
+    return false
+}
+
+/* TEST */
+var graph = new Graph();
+graph.addNode('A');
+graph.addNode('B');
+graph.addNode('C');
+graph.addNode('D');
+graph.addNode('E');
+
+graph.addEdge('A', 'B');
+graph.addEdge('A', 'C');
+graph.addEdge('B', 'C');
+
+graph.addEdge('D', 'E');
+// console.log(graph)
+//question 4.1
+console.log(isReachables('A', 'C', graph), true);
+console.log(isReachables('A', 'E', graph), false);
+console.log(isReachables('B', 'A', graph), true);
+console.log(isReachables('D', 'E', graph), true);
+//question 4.2
+var sortedArray = [1, 3, 5, 7, 10, 22, 42, 100,  300, 500]

@@ -16,4 +16,14 @@ Graph.prototype.addEgde = function(s, t) {
     }
     V[s][t] = true
 }
+Graph.prototype.findEdges = function(node) {
+    if (this.V[node] === undefined) {
+      return 'node does not exist';
+    } else {
+      return this.nodes[node];
+    }
+  };
+  Graph.prototype.hasNode = function(node) {
+    return this.V[node] !== undefined;
+  };
 module.exports = Graph;
