@@ -94,7 +94,52 @@ Graph.prototype.findEdges = function(node) {
   Graph.prototype.hasNode = function(node) {
     return this.V[node] !== undefined;
   };
-
+var BST = function (value) {
+    this.root = value
+    this.left = null
+    this.right = null
+}
+BST.prototype.insert = function(value) {
+    if(value <= this.root) {
+        if(this.left === null) {
+            var newNode = new BST(value)
+            this.left = newNode
+        } else {
+            this.left.insert(value)
+        }
+    } else {
+        if(this.right === null) {
+            var newNode = new BST(value)
+            this.right = newNode
+        } else {
+            this.right.insert(value)
+        }
+    }
+}
+BST.prototype.printBST = function() {
+    var level = [];
+    var q = new Queue();
+    var nextq = new Queue();
+    var currNode;
+  
+    q.add(this);
+    while (!q.isEmpty()) {
+      currNode = q.remove();
+      level.push(currNode.root);
+      if (currNode.left !== null) {
+        nextq.add(currNode.left);
+      }
+      if (currNode.right !== null) {
+        nextq.add(currNode.right);
+      }
+      if (q.isEmpty()) {
+        console.log(level.join(','));
+        level = [];
+        q = nextq;
+        nextq = new Queue();
+      }
+    }
+}
 function isReachables(s, t, graph) {
     var queue1 = new Queue();
     var queue2 = new Queue();
@@ -144,6 +189,17 @@ function isReachables(s, t, graph) {
     }
     return false
 }
+function createSortedBST (array, start, end) {
+    if(start > end) {
+        return null
+    }
+    var mid = Math.round((end + start)/2)
+    var root = array[mid]
+    var newBST = new BST(root)
+    newBST.left = createSortedBST(array, start, mid - 1)
+    newBST.right = createSortedBST(array, mid + 1, end)
+    return newBST
+}
 
 /* TEST */
 var graph = new Graph();
@@ -165,4 +221,6 @@ console.log(isReachables('A', 'E', graph), false);
 console.log(isReachables('B', 'A', graph), true);
 console.log(isReachables('D', 'E', graph), true);
 //question 4.2
-var sortedArray = [1, 3, 5, 7, 10, 22, 42, 100,  300, 500]
+var sortedArray = [1, 2, 3, 4]
+var sortedArrayBST = createSortedBST(sortedArray, 0, sortedArray.length - 1)
+sortedArrayBST.printBST()
