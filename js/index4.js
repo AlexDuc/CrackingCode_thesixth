@@ -1,3 +1,56 @@
+function linkedList() {
+    this.head = null
+
+}
+linkedList.prototype.push = function(val) {
+    var node = {
+        value: val,
+        next: null
+    }
+    if (this.head === null) {
+        this.head = node
+    } else {
+        var current = this.head
+        while (current.next) {
+            current = current.next
+        }
+        current.next = node
+    }
+}
+linkedList.prototype.delete = function(val) {
+    var current = this.head
+    if (current.value === val) {
+        this.head = current.next
+        current.next = null
+    } else {
+        var previous = current
+        current = current.next
+        while (current.next) {
+            if (current.value === val) {
+                previous.next = current.next
+                current.next = null
+                return
+            } else {
+                previous = current
+                current = current.next
+            }
+        }
+        if (current.value === val) {
+            previous.next = null
+        }
+    }
+}
+linkedList.prototype.printList = function() {
+    if (!this.head) {
+        console.log('empty list')
+    } else {
+        var current = this.head
+        while (current) {
+            console.log(current.value)
+            current = current.next
+        }
+    }
+}
 var stack = function() {
     this.count = 0
         // var min = []
@@ -200,7 +253,50 @@ function createSortedBST (array, start, end) {
     newBST.right = createSortedBST(array, mid + 1, end)
     return newBST
 }
-
+function createDepthLinkedList (BT) {
+    
+}
+var listOfDepths = function(bst) {
+    var listOfLists = [];
+    var list = null;
+    var newNode;
+    var q = new Queue();
+    var nextq = new Queue();
+    var currNode = bst;
+  
+    q.add(currNode);
+    while (!q.isEmpty()) {
+      currNode = q.remove();
+      newNode = new LinkedList(currNode.value);
+      newNode.next = list;
+      list = newNode;
+      if (currNode.left !== null) {
+        nextq.add(currNode.left);
+      }
+      if (currNode.right !== null) {
+        nextq.add(currNode.right);
+      }
+      if (q.isEmpty()) {
+        listOfLists.push(list);
+        list = null;
+        q = nextq;
+        nextq = new Queue();
+      }
+    }
+    return listOfLists;
+  };
+  
+  /* TEST */
+  // 1, 2, 3, 4, 5, 6, 7
+  var tree = new BST(4);
+  tree.insert(2);
+  tree.insert(6);
+  tree.insert(1);
+  tree.insert(3);
+  tree.insert(5);
+  tree.insert(7);
+  
+  console.log(listOfDepths(tree));
 /* TEST */
 var graph = new Graph();
 graph.addNode('A');
