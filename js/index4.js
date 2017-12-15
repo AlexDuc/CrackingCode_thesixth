@@ -253,70 +253,135 @@ function createSortedBST (array, start, end) {
     newBST.right = createSortedBST(array, mid + 1, end)
     return newBST
 }
-function createDepthLinkedList (BT) {
-    
-}
 var listOfDepths = function(bst) {
     var listOfLists = [];
-    var list = null;
+    var newList = new linkedList();
     var newNode;
     var q = new Queue();
     var nextq = new Queue();
     var currNode = bst;
   
     q.add(currNode);
-    while (!q.isEmpty()) {
-      currNode = q.remove();
-      newNode = new LinkedList(currNode.value);
-      newNode.next = list;
-      list = newNode;
-      if (currNode.left !== null) {
-        nextq.add(currNode.left);
-      }
-      if (currNode.right !== null) {
-        nextq.add(currNode.right);
-      }
-      if (q.isEmpty()) {
-        listOfLists.push(list);
-        list = null;
-        q = nextq;
-        nextq = new Queue();
-      }
+    while(!q.isEmpty()) {
+        currNode = q.remove()
+        newList.push(currNode.root)
+        if(currNode.left !== null) {
+            nextq.add(currNode.left)
+        }
+        if(currNode.right !== null) {
+            nextq.add(currNode.right)
+        }
+        if(q.isEmpty()) {
+            q = nextq;
+            nextq = new Queue();
+            listOfLists.push(newList)
+            newList = new linkedList();
+        }
     }
     return listOfLists;
   };
+  var checkBalance = function (bst) {
+      if(bst.left !== null && bst.right === null) {
+          if(bst.left.left != null || bst.left.right != null) {
+              return false
+          }
+      }
+      if(bst.right !== null && bst.left === null) {
+        if(bst.right.left != null || bst.right.right != null) {
+            return false
+        }
+    }
+    var answer = true
+    if (bst.left !== null) {
+        answer = answer && checkBalanced(bst.left);
+    }
+      //  if bst.left is not null, recursively call checkBalanced on bst.left
+    if (bst.right !== null) {
+        answer = answer && checkBalanced(bst.right);
+    }
+      // return answer
+    return answer;
+  }
+  var BinaryTree = function(value) {
+    this.value = value;
+    this.left = null;
+    this.right = null;
+  };
   
+  var checkBST = function (bst) {
+    if(bst.left > bst.value) {
+        return false
+    }
+    if(bst.right <  bst.value) {
+        return false
+     }
+    var answer = true
+    if (bst.left !== null) {
+        answer = answer && checkBST(bst.left);
+    }
+        //  if bst.left is not null, recursively call checkBalanced on bst.left
+    if (bst.right !== null) {
+        answer = answer && checkBST(bst.right);
+    }
+    // return answer
+  return answer;
+}
+var bt1a = new BinaryTree(5);
+var bt1b = new BinaryTree(4);
+var bt1c = new BinaryTree(6);
+var bt1d = new BinaryTree(1);
+var bt1e = new BinaryTree(100);
+
+bt1a.left = bt1b;
+bt1a.right = bt1c;
+bt1b.left = bt1d;
+bt1b.right = bt1e;
+
+console.log(checkBST(bt1a), false);
+
+var bt2a = new BinaryTree(5);
+var bt2b = new BinaryTree(3);
+var bt2c = new BinaryTree(6);
+var bt2d = new BinaryTree(1);
+var bt2e = new BinaryTree(4);
+
+bt2a.left = bt2b;
+bt2a.right = bt2c;
+bt2b.left = bt2d;
+bt2b.right = bt2e;
+
+console.log(checkBST(bt2a), true);
   /* TEST */
   // 1, 2, 3, 4, 5, 6, 7
-  var tree = new BST(4);
-  tree.insert(2);
-  tree.insert(6);
-  tree.insert(1);
-  tree.insert(3);
-  tree.insert(5);
-  tree.insert(7);
-  
-  console.log(listOfDepths(tree));
+//   var tree = new BST(4);
+//   tree.insert(2);
+//   tree.insert(6);
+//   tree.insert(1);
+//   tree.insert(3);
+//   tree.insert(5);
+//   tree.insert(7);
+//   tree.printBST()
+//   console.log(listOfDepths(tree));
 /* TEST */
-var graph = new Graph();
-graph.addNode('A');
-graph.addNode('B');
-graph.addNode('C');
-graph.addNode('D');
-graph.addNode('E');
+// var graph = new Graph();
+// graph.addNode('A');
+// graph.addNode('B');
+// graph.addNode('C');
+// graph.addNode('D');
+// graph.addNode('E');
 
-graph.addEdge('A', 'B');
-graph.addEdge('A', 'C');
-graph.addEdge('B', 'C');
+// graph.addEdge('A', 'B');
+// graph.addEdge('A', 'C');
+// graph.addEdge('B', 'C');
 
-graph.addEdge('D', 'E');
-// console.log(graph)
-//question 4.1
-console.log(isReachables('A', 'C', graph), true);
-console.log(isReachables('A', 'E', graph), false);
-console.log(isReachables('B', 'A', graph), true);
-console.log(isReachables('D', 'E', graph), true);
-//question 4.2
-var sortedArray = [1, 2, 3, 4]
-var sortedArrayBST = createSortedBST(sortedArray, 0, sortedArray.length - 1)
-sortedArrayBST.printBST()
+// graph.addEdge('D', 'E');
+// // console.log(graph)
+// //question 4.1
+// console.log(isReachables('A', 'C', graph), true);
+// console.log(isReachables('A', 'E', graph), false);
+// console.log(isReachables('B', 'A', graph), true);
+// console.log(isReachables('D', 'E', graph), true);
+// //question 4.2
+// var sortedArray = [1, 2, 3, 4]
+// var sortedArrayBST = createSortedBST(sortedArray, 0, sortedArray.length - 1)
+// sortedArrayBST.printBST()
